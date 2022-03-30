@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  server:
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context: "./server"
+    depends_on:
+      - client
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    ports:
+      - 4001:4001
+
+  client:
+    stdin_open: true
+    ports:
+      - 3000:3000
+    build:
+      dockerfile: Dockerfile
+      context: "./client"
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+
+  adminer:
+    image: adminer:latest
+    restart: unless-stopped
+    ports:
+      - 8000:8080    
